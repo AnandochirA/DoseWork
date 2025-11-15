@@ -1,0 +1,591 @@
+/* Updated CSS variables and completely redesigned styles */
+:root {
+  --dark-cream: #B4AD9A;
+  --dark-teal: #317D66;
+  --deep-teal: #1D2C27; /* Added new variable */
+  --teal: #2FAC88;
+  --gray: #313B38;
+  --dark-gray: #2A322F;
+  --black-gray: #1B2220;
+  --black: #111715;
+  --egg-white: #E8E4DA;
+}
+
+/* === ANIMATIONS === */
+@keyframes morphShape {
+  0%, 100% {
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+    transform: rotate(0deg) scale(1);
+  }
+  33% {
+    border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
+    transform: rotate(120deg) scale(1.1);
+  }
+  66% {
+    border-radius: 50% 50% 40% 60% / 30% 70% 50% 60%;
+    transform: rotate(240deg) scale(0.9);
+  }
+}
+
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0) translateX(0); }
+  50% { transform: translateY(-30px) translateX(20px); }
+}
+
+@keyframes rotateRing {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.05); }
+}
+
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.7; }
+}
+
+/* === BASE === */
+.main {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #E8E4DA 0%, #f5f2ea 100%);
+  color: var(--deep-teal); /* Updated to dark color for better contrast */
+  position: relative;
+  overflow: hidden;
+}
+
+/* New organic background shapes */
+.backgroundShapes {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.shape1, .shape2, .shape3 {
+  position: absolute;
+  filter: blur(80px);
+  animation: morphShape 25s infinite ease-in-out;
+}
+
+.shape1 {
+  width: 600px; height: 600px;
+  top: -200px; left: -100px;
+  background: radial-gradient(circle, rgba(47, 172, 136, 0.15), transparent 70%);
+  animation-delay: 0s;
+}
+
+.shape2 {
+  width: 500px; height: 500px;
+  top: 40%; right: -150px;
+  background: radial-gradient(circle, rgba(180, 173, 154, 0.12), transparent 70%);
+  animation-delay: 8s;
+}
+
+.shape3 {
+  width: 550px; height: 550px;
+  bottom: -150px; left: 50%;
+  background: radial-gradient(circle, rgba(49, 125, 102, 0.18), transparent 70%);
+  animation-delay: 16s;
+}
+
+.gridPattern {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: 
+    linear-gradient(rgba(47, 172, 136, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(47, 172, 136, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  opacity: 0.5;
+}
+
+/* === NAV === */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  background: rgba(17, 23, 21, 0.8);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(47, 172, 136, 0.15);
+  padding: 1.2rem 2rem;
+}
+
+.navContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.logo {
+  font-size: 1.8rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--teal), var(--dark-teal)); /* Updated gradient to darker colors */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.navLinks {
+  display: flex;
+  gap: 2.5rem;
+  list-style: none;
+  margin: 0; padding: 0;
+}
+
+.navLinks a {
+  color: var(--egg-white);
+  text-decoration: none;
+  font-weight: 500;
+  position: relative;
+  transition: color 0.3s;
+}
+
+.navLinks a::after {
+  content: '';
+  position: absolute;
+  bottom: -6px; left: 0;
+  width: 0; height: 2px;
+  background: var(--teal);
+  transition: width 0.3s;
+}
+
+.navLinks a:hover,
+.navLinks a.active {
+  color: var(--teal);
+}
+
+.navLinks a:hover::after,
+.navLinks a.active::after {
+  width: 100%;
+}
+
+/* === CONTAINER === */
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 140px 40px 80px;
+  position: relative;
+  z-index: 1;
+}
+
+/* New split hero layout */
+.heroSplit {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  margin-bottom: 100px;
+  align-items: center;
+}
+
+.heroLeft {
+  padding-right: 40px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(47, 172, 136, 0.1);
+  border: 1px solid rgba(47, 172, 136, 0.3);
+  padding: 10px 20px;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--teal);
+  margin-bottom: 32px;
+}
+
+.badgeDot {
+  width: 8px; height: 8px;
+  background: var(--teal);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+.mainTitle {
+  font-size: clamp(3.5rem, 8vw, 5.5rem);
+  font-weight: 900;
+  line-height: 1;
+  margin-bottom: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.titleWord1 {
+  color: var(--deep-teal); /* Changed to deep teal */
+  letter-spacing: -3px;
+}
+
+.titleWord2 {
+  background: linear-gradient(135deg, var(--dark-teal), var(--teal)); /* Updated gradient to darker teal colors */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -2px;
+}
+
+.heroDescription {
+  font-size: 1.25rem;
+  color: var(--dark-gray); /* Changed to dark gray */
+  opacity: 0.85;
+  line-height: 1.7;
+  margin-bottom: 48px;
+  max-width: 540px;
+}
+
+/* New quick info cards */
+.quickInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.infoItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  border: 1px solid rgba(47, 172, 136, 0.15);
+  transition: all 0.3s;
+}
+
+.infoItem:hover {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(47, 172, 136, 0.3);
+  transform: translateX(8px);
+}
+
+.infoIcon {
+  width: 48px; height: 48px;
+  background: linear-gradient(135deg, rgba(47, 172, 136, 0.2), rgba(47, 172, 136, 0.05));
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--teal);
+  flex-shrink: 0;
+}
+
+.infoIcon svg {
+  width: 24px; height: 24px;
+}
+
+.infoLabel {
+  font-size: 0.85rem;
+  color: var(--teal);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.infoLink {
+  color: var(--deep-teal); /* Changed to deep teal */
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: 600;
+  transition: color 0.3s;
+}
+
+.infoLink:hover {
+  color: var(--teal);
+}
+
+.infoValue {
+  color: var(--deep-teal); /* Changed to deep teal */
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+/* New profile card with organic design */
+.heroRight {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.profileCard {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(47, 172, 136, 0.2);
+  border-radius: 50px;
+  padding: 60px 50px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.1);
+}
+
+.profileCardGlow {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(47, 172, 136, 0.15), transparent 70%);
+  animation: glowPulse 4s infinite;
+  z-index: 0;
+}
+
+.profileImageWrapper {
+  position: relative;
+  width: 200px; height: 200px;
+  margin: 0 auto 32px;
+  z-index: 1;
+}
+
+.profileImage {
+  width: 100%; height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid var(--teal);
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 20px 50px rgba(47, 172, 136, 0.3);
+}
+
+.profileRing {
+  position: absolute;
+  top: -10px; left: -10px; right: -10px; bottom: -10px;
+  border: 2px solid rgba(47, 172, 136, 0.3);
+  border-radius: 50%;
+  border-top-color: var(--teal);
+  border-right-color: var(--teal);
+  animation: rotateRing 4s linear infinite;
+  z-index: 1;
+}
+
+.profileName {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--deep-teal); /* Changed to deep teal */
+  margin-bottom: 8px;
+  position: relative;
+  z-index: 1;
+}
+
+.profileTitle {
+  font-size: 1.1rem;
+  color: var(--teal);
+  font-weight: 600;
+  margin-bottom: 24px;
+  position: relative;
+  z-index: 1;
+}
+
+.profileDivider {
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--teal), transparent);
+  margin: 24px auto;
+  border-radius: 10px;
+}
+
+.profileBio {
+  font-size: 1rem;
+  color: var(--dark-gray); /* Changed to dark gray */
+  opacity: 0.85;
+  line-height: 1.7;
+  position: relative;
+  z-index: 1;
+}
+
+/* New action cards with unique shapes */
+.actionCards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 40px;
+  margin-bottom: 100px;
+}
+
+.actionCard {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(47, 172, 136, 0.2);
+  border-radius: 40px;
+  padding: 50px 40px;
+  text-decoration: none;
+  color: var(--dark-gray); /* Changed to dark gray */
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.actionCard:hover {
+  border-color: var(--teal);
+  box-shadow: 0 30px 70px rgba(47, 172, 136, 0.3);
+}
+
+.cardShape {
+  position: absolute;
+  top: -40%; right: -20%;
+  width: 250px; height: 250px;
+  background: radial-gradient(circle, rgba(47, 172, 136, 0.12), transparent 70%);
+  border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  animation: morphShape 20s infinite ease-in-out;
+  z-index: 0;
+}
+
+.coachingCard .cardShape {
+  background: radial-gradient(circle, rgba(180, 173, 154, 0.12), transparent 70%);
+}
+
+.investorCard .cardShape {
+  background: radial-gradient(circle, rgba(49, 125, 102, 0.15), transparent 70%);
+}
+
+.cardIconLarge {
+  width: 70px; height: 70px;
+  background: linear-gradient(135deg, rgba(47, 172, 136, 0.2), rgba(47, 172, 136, 0.05));
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--teal);
+  margin-bottom: 28px;
+  position: relative;
+  z-index: 1;
+  transition: all 0.4s;
+}
+
+.actionCard:hover .cardIconLarge {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.coachingCard .cardIconLarge {
+  background: linear-gradient(135deg, rgba(180, 173, 154, 0.2), rgba(180, 173, 154, 0.05));
+  color: var(--dark-cream);
+}
+
+.investorCard .cardIconLarge {
+  background: linear-gradient(135deg, rgba(49, 125, 102, 0.2), rgba(49, 125, 102, 0.05));
+  color: var(--dark-teal);
+}
+
+.cardIconLarge svg {
+  width: 36px; height: 36px;
+  stroke-width: 2;
+}
+
+.cardTitle {
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: var(--deep-teal); /* Changed to deep teal */
+  margin-bottom: 12px;
+  position: relative;
+  z-index: 1;
+}
+
+.cardDesc {
+  font-size: 1.05rem;
+  color: var(--dark-gray); /* Changed to dark gray */
+  opacity: 0.8;
+  line-height: 1.6;
+  margin-bottom: 24px;
+  position: relative;
+  z-index: 1;
+}
+
+.cardArrow {
+  width: 40px; height: 40px;
+  background: rgba(47, 172, 136, 0.15);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--teal);
+  margin-left: auto;
+  transition: all 0.4s;
+  position: relative;
+  z-index: 1;
+}
+
+.actionCard:hover .cardArrow {
+  background: var(--teal);
+  color: var(--black);
+  transform: translateX(8px);
+}
+
+.cardArrow svg {
+  width: 20px; height: 20px;
+}
+
+/* New logo footer */
+.logoFooter {
+  text-align: center;
+  padding: 60px 0;
+}
+
+.logoWrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.footerLogo {
+  width: 180px; height: auto;
+  border-radius: 30px;
+  filter: drop-shadow(0 15px 40px rgba(47, 172, 136, 0.4));
+  transition: all 0.4s;
+}
+
+.footerLogo:hover {
+  transform: scale(1.1) rotate(3deg);
+  filter: drop-shadow(0 20px 50px rgba(47, 172, 136, 0.6));
+}
+
+.logoGlowEffect {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 140%; height: 140%;
+  background: radial-gradient(circle, rgba(47, 172, 136, 0.2), transparent 70%);
+  border-radius: 50%;
+  animation: glowPulse 3s infinite;
+  z-index: -1;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 1024px) {
+  .heroSplit {
+    grid-template-columns: 1fr;
+    gap: 60px;
+  }
+  
+  .heroLeft {
+    padding-right: 0;
+  }
+  
+  .actionCards {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .navLinks { display: none; }
+  .container { padding: 120px 20px 60px; }
+  .mainTitle { font-size: 3rem; }
+  .heroDescription { font-size: 1.1rem; }
+  .profileCard { padding: 50px 40px; }
+  .actionCard { padding: 40px 30px; }
+}
+
+@media (max-width: 480px) {
+  .container { padding: 100px 16px 50px; }
+  .mainTitle { font-size: 2.5rem; }
+  .profileCard { padding: 40px 30px; }
+  .profileImageWrapper { width: 160px; height: 160px; }
+  .actionCards { gap: 30px; }
+}

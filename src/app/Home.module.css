@@ -1,0 +1,937 @@
+/* ========================================================
+   DOSE – WELCOMING, ORGANIC, EYE-CATCHING DESIGN
+   ======================================================== */
+
+/* ──────────────────────  VARIABLES & ANIMATIONS  ────────────────────── */
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(5deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.05); opacity: 1; }
+}
+
+@keyframes morphBlob {
+  0%, 100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+  25% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+  50% { border-radius: 50% 50% 40% 60% / 30% 60% 70% 40%; }
+  75% { border-radius: 70% 30% 50% 50% / 40% 70% 60% 30%; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
+}
+
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* ──────────────────────  PAGE BASE  ────────────────────── */
+.main {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #E8E4DA 0%, #f5f2ea 100%);
+  color: #313B38;
+  overflow-x: hidden;
+}
+
+/* New title section styles for separated header */
+.titleSection {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6rem 6rem 3rem;
+  background: linear-gradient(135deg, #E8E4DA 0%, #f5f2ea 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.svgHeaderContainer {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.svgHeader {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* New globe section with row layout */
+.globeSection {
+  padding: 4rem 6rem;
+  background: linear-gradient(135deg, #E8E4DA 0%, #f5f2ea 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.globeSection::before {
+  content: "";
+  position: absolute;
+  top: -15%;
+  right: -10%;
+  width: 700px;
+  height: 700px;
+  background: linear-gradient(135deg, rgba(47, 172, 136, 0.25), rgba(49, 125, 102, 0.15));
+  border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  animation: morphBlob 20s ease-in-out infinite;
+  z-index: 0;
+  filter: blur(60px);
+}
+
+.globeRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4rem;
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+  z-index: 10;
+  position: relative;
+}
+
+.doseContent {
+  flex: 1;
+  max-width: 600px;
+  z-index: 10;
+  position: relative;
+}
+
+.doseTitle {
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: #2A322F;
+  margin-bottom: 2rem;
+  line-height: 1.5;
+  position: relative;
+}
+
+.doseDescription {
+  font-size: 1.3rem;
+  line-height: 1.9;
+  color: #313B38;
+  margin-bottom: 2.5rem;
+  font-weight: 400;
+  padding: 2rem 2.5rem;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(232, 228, 218, 0.6));
+  border-radius: 30px;
+  border: 2px solid rgba(47, 172, 136, 0.15);
+  backdrop-filter: blur(10px);
+  position: relative;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+}
+
+/* Remove old hero section styles */
+.hero {
+  display: none;
+}
+
+.heroRow {
+  display: none;
+}
+
+.heroContent {
+  display: none;
+}
+
+.headerWrapper {
+  display: none;
+}
+
+.floatingBadge {
+  display: none;
+}
+
+.badgeDot {
+  display: none;
+}
+
+.heroTitle {
+  display: none;
+}
+
+.titleLine1 {
+  display: none;
+}
+
+.titleLine2 {
+  display: none;
+}
+
+.titleAccent {
+  display: none;
+}
+
+.titleUnderline {
+  display: none;
+}
+
+.heroSubtitle {
+  display: none;
+}
+
+.heroDescription {
+  display: none;
+}
+
+.testimonial {
+  display: none;
+}
+
+.quoteAuthor {
+  display: none;
+}
+
+.globeWrapper {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.globeWrapper::before {
+  content: "";
+  position: absolute;
+  inset: -50px;
+  background-image: radial-gradient(circle, #B4AD9A 2px, transparent 2px);
+  background-size: 40px 40px;
+  opacity: 0.3;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* ──────────────────────  DIFFERENCE SECTION  ────────────────────── */
+.differenceSection {
+  padding: 6rem 6rem;
+  background: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.differenceSection::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: 0;
+  width: 100%;
+  height: 100px;
+  background: linear-gradient(135deg, #E8E4DA 0%, #f5f2ea 100%);
+  clip-path: ellipse(100% 100% at 50% 0%);
+}
+
+.differenceSection::after {
+  content: "";
+  position: absolute;
+  top: 15%;
+  right: 5%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(47, 172, 136, 0.08), transparent 70%);
+  border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  animation: float 15s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.differenceTitle {
+  font-size: 3rem;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 4rem;
+  color: #317D66;
+  text-shadow: none;
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.differenceTitle::after {
+  content: "";
+  position: absolute;
+  bottom: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  height: 6px;
+  background: linear-gradient(90deg, transparent, #2FAC88, transparent);
+  border-radius: 10px;
+}
+
+/* Updated grid to force horizontal row layout */
+.differenceGrid {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  max-width: 1600px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+  overflow-x: auto;
+  padding-bottom: 1rem;
+}
+
+/* Updated card styles - simpler, no flip effect */
+.differenceCard {
+  position: relative;
+  min-height: 380px;
+  min-width: 280px;
+  flex: 1;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 40px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  background: linear-gradient(135deg, #f9f8f5, white);
+  backdrop-filter: blur(20px);
+  border: 3px solid rgba(47, 172, 136, 0.2);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  text-align: center;
+}
+
+.differenceCard:hover {
+  transform: translateY(-12px) scale(1.03);
+  box-shadow: 0 20px 50px rgba(47, 172, 136, 0.25);
+  border-color: #2FAC88;
+}
+
+.differenceCard::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 40px;
+  padding: 3px;
+  background: linear-gradient(135deg, #2FAC88, #317D66);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.differenceCard:hover::before {
+  opacity: 1;
+}
+
+.differenceCardFront,
+.differenceCardBack {
+  display: none;
+}
+
+.differenceIcon {
+  font-size: 5rem;
+  margin-bottom: 1.5rem;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+  transition: transform 0.3s ease;
+}
+
+.differenceCard:hover .differenceIcon {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.differenceCard h3 {
+  font-size: 2rem;
+  font-weight: 900;
+  margin-bottom: 1rem;
+  color: #317D66;
+  letter-spacing: -0.02em;
+}
+
+.differenceCard p {
+  font-size: 1.05rem;
+  color: #313B38;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.differenceDetail {
+  font-size: 1.1rem !important;
+  color: #2A322F !important;
+  font-weight: 600 !important;
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 2px solid rgba(47, 172, 136, 0.2);
+}
+
+.differenceTime {
+  padding: 0.6rem 1.5rem;
+  background: linear-gradient(135deg, #2FAC88, #317D66);
+  border-radius: 30px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 12px rgba(47, 172, 136, 0.3);
+}
+
+.sparkCard .differenceCardFront {
+  border-color: transparent;
+}
+
+.waveCard .differenceCardFront {
+  border-color: transparent;
+}
+
+.popcornCard .differenceCardFront {
+  border-color: transparent;
+}
+
+.rsdCard .differenceCardFront {
+  border-color: transparent;
+}
+
+.differenceIcon {
+  font-size: 5rem;
+  margin-bottom: 1.5rem;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+  animation: pulse 3s ease-in-out infinite;
+}
+
+.differenceCardFront h3 {
+  font-size: 2rem;
+  font-weight: 900;
+  margin-bottom: 1rem;
+  color: #317D66;
+  letter-spacing: -0.02em;
+}
+
+.differenceCardFront p {
+  font-size: 1.05rem;
+  color: #313B38;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.differenceTime {
+  padding: 0.6rem 1.5rem;
+  background: linear-gradient(135deg, #2FAC88, #317D66);
+  border-radius: 30px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: white;
+  margin-top: auto;
+  box-shadow: 0 4px 12px rgba(47, 172, 136, 0.3);
+}
+
+.differenceCardBack p {
+  font-size: 1.3rem;
+  color: #E8E4DA;
+  line-height: 1.8;
+  font-weight: 500;
+}
+
+/* ──────────────────────  STATS SECTION  ────────────────────── */
+.statsSection {
+  padding: 6rem 6rem;
+  background: linear-gradient(135deg, #f5f2ea 0%, #E8E4DA 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.statsSection::before {
+  content: "";
+  position: absolute;
+  top: 10%;
+  left: -10%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(180, 173, 154, 0.15), transparent 60%);
+  border-radius: 50% 60% 70% 40% / 60% 50% 40% 70%;
+  animation: morphBlob 20s ease-in-out infinite;
+}
+
+.statsSection h2 {
+  font-size: 3rem;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 4rem;
+  color: #317D66;
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.statsSection h2::after {
+  content: "";
+  position: absolute;
+  bottom: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 150px;
+  height: 5px;
+  background: linear-gradient(90deg, transparent, #2FAC88, transparent);
+  border-radius: 10px;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 2rem;
+  max-width: 1400px;
+  margin: 0 auto 3rem;
+  position: relative;
+  z-index: 1;
+}
+
+.stat {
+  background: white;
+  backdrop-filter: blur(20px);
+  border: 3px solid rgba(47, 172, 136, 0.2);
+  border-radius: 35px;
+  padding: 3rem 2rem;
+  text-align: center;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: default;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(47, 172, 136, 0.1), transparent 50%);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.stat:hover::before {
+  opacity: 1;
+}
+
+.stat:hover {
+  background: white;
+  border-color: #2FAC88;
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 20px 50px rgba(47, 172, 136, 0.2);
+}
+
+.statNumber {
+  display: block;
+  font-size: 3.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #317D66, #2FAC88);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 1rem;
+  text-shadow: none;
+}
+
+.statLabel {
+  display: block;
+  font-size: 1.2rem;
+  color: #2A322F;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.statsNote {
+  text-align: center;
+  color: #313B38;
+  font-size: 1rem;
+  font-style: italic;
+  opacity: 0.75;
+}
+
+/* ──────────────────────  COACHING CTA  ────────────────────── */
+.coachingCta {
+  padding: 6rem 6rem;
+  text-align: center;
+  background: linear-gradient(135deg, #317D66, #2FAC88);
+  position: relative;
+  overflow: hidden;
+  margin: 4rem 6rem;
+  border-radius: 60px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+.coachingCta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 2px, transparent 2px),
+    radial-gradient(circle at 80% 30%, rgba(255, 255, 255, 0.08) 3px, transparent 3px),
+    radial-gradient(circle at 40% 80%, rgba(255, 255, 255, 0.06) 2px, transparent 2px);
+  background-size: 60px 60px, 80px 80px, 100px 100px;
+  animation: float 20s linear infinite;
+  pointer-events: none;
+}
+
+.coachingCta h3 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 2rem 0 1rem;
+  color: #fff;
+  position: relative;
+  z-index: 1;
+}
+
+.coachingCta p {
+  font-size: 1.3rem;
+  color: rgba(255, 255, 255, 0.95);
+  margin-bottom: 2.5rem;
+  line-height: 1.7;
+  position: relative;
+  z-index: 1;
+}
+
+.coachingButton {
+  display: inline-block;
+  padding: 1.3rem 3rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  border-radius: 50px;
+  text-decoration: none;
+  background: white;
+  color: #317D66;
+  border: 2px solid transparent;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  z-index: 1;
+}
+
+.coachingButton:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+  background: #E8E4DA;
+}
+
+/* ──────────────────────  RESPONSIVE  ────────────────────── */
+/* Responsive updates */
+@media (max-width: 1200px) {
+  .titleSection {
+    padding: 4rem 3rem 2rem;
+  }
+  
+  .globeSection {
+    padding: 3rem 3rem;
+  }
+  
+  .globeRow {
+    flex-direction: column;
+    gap: 3rem;
+  }
+
+  .globeWrapper {
+    order: -1;
+  }
+
+  .doseContent {
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .doseTitle {
+    font-size: 1.9rem;
+  }
+
+  .hero {
+    padding: 3rem 3rem;
+  }
+  
+  .heroRow {
+    flex-direction: column;
+    gap: 3rem;
+  }
+
+  .globeWrapper {
+    order: -1;
+  }
+
+  .heroContent {
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .heroTitle {
+    font-size: 3.5rem;
+  }
+
+  .titleAccent {
+    font-size: 4rem;
+  }
+
+  .heroSubtitle {
+    font-size: 1.7rem;
+  }
+
+  .brandName {
+    font-size: 1.9rem;
+  }
+  
+  .testimonial {
+    text-align: left;
+  }
+
+  /* Keep cards in row for tablets */
+  .differenceGrid {
+    gap: 1.5rem;
+  }
+
+  .differenceCard {
+    min-width: 240px;
+  }
+}
+
+/* Enhanced CTA button styles with icons and animations */
+.ctaRow {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.ctaButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.3rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border-radius: 50px;
+  text-decoration: none;
+  background: linear-gradient(135deg, #317D66, #2FAC88);
+  color: white;
+  border: 3px solid transparent;
+  box-shadow: 0 8px 30px rgba(47, 172, 136, 0.3);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  min-width: 280px;
+  justify-content: center;
+}
+
+.ctaButton::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.ctaButton:hover::before {
+  opacity: 1;
+}
+
+.ctaButton::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.ctaButton:hover::after {
+  width: 400px;
+  height: 400px;
+}
+
+.ctaButton:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 15px 45px rgba(47, 172, 136, 0.45);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.mobileButton {
+  background: linear-gradient(135deg, #2FAC88, #35C49A);
+}
+
+.buttonIcon {
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  transition: transform 0.4s;
+  z-index: 1;
+}
+
+.ctaButton:hover .buttonIcon {
+  transform: scale(1.2) rotate(10deg);
+}
+
+.buttonText {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2rem;
+  z-index: 1;
+}
+
+.buttonLabel {
+  font-size: 0.85rem;
+  font-weight: 500;
+  opacity: 0.95;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.buttonPlatform {
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.buttonArrow {
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.4s;
+  z-index: 1;
+}
+
+.ctaButton:hover .buttonArrow {
+  transform: translateX(5px);
+}
+
+.brandName {
+  font-weight: 900;
+  background: linear-gradient(135deg, #317D66, #2FAC88);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 2.5rem;
+  position: relative;
+  display: inline-block;
+}
+
+.brandName::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #317D66, #2FAC88, #317D66);
+  border-radius: 2px;
+  animation: shimmer 3s linear infinite;
+  background-size: 200% 100%;
+}
+
+.highlightText {
+  color: #2FAC88;
+  font-weight: 700;
+  position: relative;
+  padding: 0 0.3rem;
+}
+
+.emphasisText {
+  color: #317D66;
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-color: rgba(47, 172, 136, 0.3);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+.descriptionIcon {
+  font-size: 1.5rem;
+  margin-right: 0.5rem;
+  display: inline-block;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@media (max-width: 768px) {
+  .titleSection {
+    padding: 3rem 1.5rem 1.5rem;
+  }
+
+  .svgHeaderContainer {
+    max-width: 100%;
+  }
+  
+  .globeSection {
+    padding: 2rem 1.5rem;
+  }
+
+  .doseTitle {
+    font-size: 1.5rem;
+  }
+
+  .doseDescription {
+    font-size: 1.1rem;
+    padding: 1.5rem;
+  }
+
+  .hero {
+    padding: 2rem 1.5rem;
+  }
+
+  .heroTitle {
+    font-size: 2.5rem;
+  }
+
+  .titleAccent {
+    font-size: 3rem;
+  }
+
+  .heroSubtitle {
+    font-size: 1.4rem;
+  }
+
+  .brandName {
+    font-size: 1.5rem;
+  }
+
+  .heroDescription {
+    font-size: 1.1rem;
+    padding: 1.5rem;
+  }
+
+  .ctaRow {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .ctaButton {
+    width: 100%;
+    min-width: unset;
+  }
+
+  .differenceSection,
+  .statsSection,
+  .coachingCta {
+    padding: 3rem 1.5rem;
+  }
+
+  .differenceTitle,
+  .statsSection h2 {
+    font-size: 2rem;
+  }
+
+  /* Stack cards vertically on mobile */
+  .differenceGrid {
+    flex-direction: column;
+    overflow-x: visible;
+  }
+
+  .differenceCard {
+    min-width: 100%;
+  }
+}

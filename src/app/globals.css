@@ -3,13 +3,14 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-dark-cream: #B4AD9A;
+  --color-dark-teal: #317D66;
+  --color-teal: #2FAC88;
+  --color-gray: #313B38;
+  --color-dark-gray: #2A322F;
+  --color-black-gray: #1B2220;
+  --color-black: #111715;
+  --color-egg-white: #E8E4DA;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -20,7 +21,43 @@
 }
 
 body {
-  background: var(--background);
+  background: var(--color-egg-white);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+h1, h2, h3 {
+  margin: 0;
+  font-family: inherit;
+}
+
+.toolsShowcase h2 {
+  font-size: 2.8rem;
+  color: var(--color-dark-teal);
+  margin-bottom: 3rem;
+  font-weight: 900;
+}
+
+.statsSection h2 {
+  font-size: 2.5rem;
+  margin-bottom: 3rem;
+  color: var(--color-dark-cream);
+}
+
+.pricingSection h2 {
+  font-size: 2.5rem;
+  color: var(--color-dark-cream);
+  margin-bottom: 3rem;
+}
+
+.coachingCta h3 {
+  font-size: 2rem;
+  color: var(--color-egg-white);
+  margin-top: 1rem;
+}
+
+.coachingCta p {
+  font-size: 1.1rem;
+  color: var(--color-egg-white);
+  margin-bottom: 2rem;
 }
