@@ -13,6 +13,8 @@ from src.infrastructure.database.session import Base
 
 from src.modules.auth.infrastructure.persistence.models import User
 
+config = context.config
+
 config.set_main_option("sqlalchemy.url", settings.DATABASE_URL.replace('+asyncpg', ''))
 
 if config.config_file_name is not None:
