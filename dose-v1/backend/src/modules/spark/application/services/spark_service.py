@@ -1,0 +1,122 @@
+"""
+SPARK Service - Application Layer
+Business logic for SPARK cognitive restructuring sessions
+"""
+
+from datetime import datetime
+from uuid import uuid4, UUID
+from typing import List, Optional
+
+from src.modules.spark.domain.entities.spark_session import SparkSession
+from src.modules.spark.domain.repositories.spark_session_repository import ISparkSessionRepository
+from src.modules.spark.application.dto.spark_dto import (
+    CreateSparkSessionDTO,
+    UpdateStepDTO,
+    SparkSessionDTO,
+    SparkSessionSummaryDTO
+)
+
+class SparkService:
+    """Service handling SPARK session business logic."""
+    
+    def __init__(self, session_repository: ISparkSessionRepository):
+        self.session_repository = session_repository
+
+    async def create_session(self, dto: CreateSparkSessionDTO) -> SparkSessionDTO:
+        """Create a new SPARK session."""
+        # Create session entity
+        session = SparkSession(
+            id=uuid4(),
+            user_id=dto.user_id,
+            status="in_progress",
+            current_step=1,
+            situation_response=None,
+            perception_response=None,
+            affect_response=None,
+            response_response=None,
+            key_result_response=None,
+            created_at=datetime.utcnow(),
+            updated_at=datetime.utcnow(),
+            completed_at=None,
+        )
+        
+        # Save to database
+        created_session = await self.session_repository.create(session)
+        
+        # Convert to DTO and return
+        return self._to_dto(created_session)
+
+    async def update_step(self, dto: UpdateStepDTO) -> SparkSessionDTO:
+        """Update a step response."""
+        # Get session
+        session = await self.session_repository.get_by_id(dto.session_id)
+        if not session:
+            raise ValueError(f"Session not found: {dto.session_id}")
+        
+        # Check if can progress to this step
+        if not session.can_progress_to_step(dto.step_number):
+            raise ValueError(f"Cannot update step {dto.step_number}")
+        
+        # Update step response (entity method handles logic)
+        session.set_step_response(dto.step_number, dto.response)
+        session.updated_at = datetime.utcnow()
+        
+        # Save updated session
+        updated_session = await self.session_repository.update(session)
+        
+        return self._to_dto(updated_session)
+    
+    async def complete_session(self, session_id: UUID) -> SparkSessionDTO:
+        """Mark session as completed."""
+        # Get session
+        session = await self.session_repository.get_by_id(session_id)
+        if not session:
+            raise ValueError(f"Session not found: {session_id}")
+        
+        # Complete session (entity validates all steps done)
+        session.complete_session()
+        session.updated_at = datetime.utcnow()
+        
+        # Save
+        completed_session = await self.session_repository.update(session)
+        
+        return self._to_dto(completed_session)
+
+    async def get_session(self, session_id: UUID) -> Optional[SparkSessionDTO]:
+        """Get session by ID."""
+        session = await self.session_repository.get_by_id(session_id)
+        return self._to_dto(session) if session else None
+
+    async def get_user_sessions(self, user_id: UUID, limit: int = 50) -> List[SparkSessionSummaryDTO]:
+        """Get all sessions for a user."""
+        sessions = await self.session_repository.get_by_user_id(user_id, limit)
+        return [self._to_summary_dto(session) for session in sessions]
+
+    @staticmethod
+    def _to_dto(session: SparkSession) -> SparkSessionDTO:
+        """Convert entity to full DTO."""
+        return SparkSessionDTO(
+            id=session.id,
+            user_id=session.user_id,
+            status=session.status,
+            current_step=session.current_step,
+            situation_response=session.situation_response,
+            perception_response=session.perception_response,
+            affect_response=session.affect_response,
+            response_response=session.response_response,
+            key_result_response=session.key_result_response,
+            created_at=session.created_at,
+            updated_at=session.updated_at,
+            completed_at=session.completed_at,
+        )
+
+    @staticmethod
+    def _to_summary_dto(session: SparkSession) -> SparkSessionSummaryDTO:
+        """Convert entity to summary DTO."""
+        return SparkSessionSummaryDTO(
+            id=session.id,
+            status=session.status,
+            current_step=session.current_step,
+            created_at=session.created_at,
+            completed_at=session.completed_at,
+        )
