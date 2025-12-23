@@ -14,14 +14,23 @@ class TokenService:
     def create_access_token(user_id: str, email: str) -> str:
         """Create JWT access token."""
         expire = datetime.utcnow() + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
-        payload = {"sub": user_id, "email": email, "exp": expire, "type": "access"}
+        payload = {
+            "sub": user_id,
+            "email": email,
+            "exp": expire,  
+            "type": "access"
+        }
         return jwt.encode(payload, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
 
     @staticmethod
     def create_refresh_token(user_id: str) -> str:
         """Create JWT refresh token."""
-        expire = timedelta(days=settings.REFRESH_TOKEN_EXPIRE_DAYS)
-        payload = {"sub": user_id, "exp": expire, "type": "refresh"}
+        expire = datetime.utcnow() + timedelta(days=settings.REFRESH_TOKEN_EXPIRE_DAYS)
+        payload = {
+            "sub": user_id,
+            "exp": expire, 
+            "type": "refresh"
+        }
         return jwt.encode(payload, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
 
     @staticmethod

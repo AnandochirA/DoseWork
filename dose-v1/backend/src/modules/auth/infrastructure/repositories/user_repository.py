@@ -19,14 +19,20 @@ class UserRepository(IUserRepository):
         """Create a new user in database."""
         db_user = UserModel(
             id=user.id,
-            email = user.email,
-            hashed_password = user.hashed_password,
-            full_name = user.full_name,
-            is_active = user.is_active,
-            is_verified = user.is_verified,
-            created_at = user.created_at,
-            updated_at = user.created_at
+            email=user.email,
+            hashed_password=user.hashed_password,
+            full_name=user.full_name,
+            is_active=user.is_active,
+            is_verified=user.is_verified,
+            created_at=user.created_at,
+            updated_at=user.created_at
         )
+        
+        self.session.add(db_user)
+        await self.session.commit()          # ← ADD THIS LINE
+        await self.session.refresh(db_user)  # ← Optional but recommended
+        
+        return self._to_entity(db_user)      # ← Make sure you return this
     
     async def get_by_id(self, user_id: UUID) -> Optional[UserEntity]:
         """Get user by ID."""
@@ -55,9 +61,9 @@ class UserRepository(IUserRepository):
         db_user.full_name = user.full_name
         db_user.is_active = user.is_active
         db_user.is_verified = user.is_verified
-        db.created_at = user.created_at
-        db.updated_at = user.updated_at
-        
+        db_user.created_at = user.created_at
+        db_user.updated_at = user.updated_at
+                
         await self.session.flush()
         await self.session.refresh(db_user)
         return self._to_entity(db_user)
