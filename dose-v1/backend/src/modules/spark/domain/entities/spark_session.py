@@ -81,9 +81,12 @@ class SparkSession:
             self.status = "completed"
             self.completed_at = datetime.utcnow()
             self.updated_at = datetime.utcnow()
+        else:
+            raise ValueError("All 5 steps must be completed before finishing the session")
+    
 
     def is_completed(self) -> bool:
-        return self.status.is_completed
+        return self.status == "completed"  # ✅ Correct!
 
     def get_step_response(self, step_number: int) -> Optional[str]:
         if not (1 <= step_number <= 5):

@@ -10,9 +10,14 @@ AsyncSessionLocal = async_sessionmaker(engine, class_=AsyncSession, expire_on_co
 class Base(DeclarativeBase):
     pass
 
-async def get_db() -> AsyncGenerator[AsyncSession, None]:
+async def get_db():
     async with AsyncSessionLocal() as session:
-        yield session
+        try:
+            yield session
+            await session.commit()  # ✅ Must have this!
+        except Exception:
+            await session.rollback()
+            raise
 
 async def init_db() -> None:
     async with engine.begin() as conn:
