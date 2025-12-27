@@ -2,9 +2,9 @@
 SparkSession Repository Implementation - Infrastructure Layer
 """
 
-from typing import List, Optional
+from typing import List, Optional, Tuple
 from uuid import UUID
-from sqlalchemy import select
+from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.modules.spark.domain.entities.spark_session import SparkSession as SparkSessionEntity
@@ -46,16 +46,41 @@ class SparkSessionRepository(ISparkSessionRepository):
         db_session = result.scalar_one_or_none()
         return self._to_entity(db_session) if db_session else None
 
-    async def get_by_user_id(self, user_id: UUID, limit: int = 50) -> List[SparkSessionEntity]:
-        """Get all sessions for a user."""
+    async def get_by_user_id(
+        self,
+        user_id: UUID,
+        limit: int = 50,
+        offset: int = 0
+    ) -> Tuple[List[SparkSessionEntity], int]:
+        """
+        Get sessions for a user with pagination.
+
+        Args:
+            user_id: The user's UUID
+            limit: Maximum number of sessions to return
+            offset: Number of sessions to skip
+
+        Returns:
+            Tuple of (sessions list, total count)
+        """
+        # Get paginated results
         result = await self.session.execute(
             select(SparkSessionModel)
             .where(SparkSessionModel.user_id == user_id)
             .order_by(SparkSessionModel.created_at.desc())
             .limit(limit)
+            .offset(offset)
         )
         db_sessions = result.scalars().all()
-        return [self._to_entity(db_session) for db_session in db_sessions]
+
+        # Get total count
+        count_result = await self.session.execute(
+            select(func.count(SparkSessionModel.id))
+            .where(SparkSessionModel.user_id == user_id)
+        )
+        total_count = count_result.scalar()
+
+        return [self._to_entity(db_session) for db_session in db_sessions], total_count
     
     async def update(self, session: SparkSessionEntity) -> SparkSessionEntity:
         """Update existing session."""
