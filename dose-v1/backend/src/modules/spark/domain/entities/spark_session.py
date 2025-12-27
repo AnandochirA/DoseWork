@@ -45,17 +45,36 @@ class SparkSession:
     }
 
     def can_progress_to_step(self, step_number: int) -> bool:
+        """
+        Check if the session can progress to a specific step.
+
+        Args:
+            step_number: The step number (1-5) to check.
+
+        Returns:
+            True if progression is allowed, False otherwise.
+        """
         if not (1 <= step_number <= 5):
             return False
         if self.is_completed():
             return False
         if step_number < self.current_step:
-            return False  
+            return False
         if step_number > self.current_step + 1:
-            return False  
+            return False
         return True
 
     def set_step_response(self, step_number: int, response: str) -> None:
+        """
+        Set the response for a specific step.
+
+        Args:
+            step_number: The step number (1-5) to update.
+            response: The user's response text.
+
+        Raises:
+            ValueError: If step progression is invalid or response is empty.
+        """
         if not self.can_progress_to_step(step_number):
             raise ValueError(f"Cannot set response for step {step_number} at this time")
 
@@ -77,8 +96,14 @@ class SparkSession:
 
         
     def complete_session(self) -> None:
+        """
+        Complete the SPARK session.
+
+        Raises:
+            ValueError: If all 5 steps are not completed.
+        """
         if all(getattr(self, field) is not None for field in self._STEP_FIELDS.values()):
-            self.status = "completed"
+            self.status = SessionStatus.COMPLETED
             self.completed_at = datetime.utcnow()
             self.updated_at = datetime.utcnow()
         else:
@@ -86,9 +111,22 @@ class SparkSession:
     
 
     def is_completed(self) -> bool:
-        return self.status == "completed"  # ✅ Correct!
+        """Check if the session is completed."""
+        return self.status == SessionStatus.COMPLETED
 
     def get_step_response(self, step_number: int) -> Optional[str]:
+        """
+        Get the response for a specific step.
+
+        Args:
+            step_number: The step number (1-5) to retrieve.
+
+        Returns:
+            The response text if set, None otherwise.
+
+        Raises:
+            ValueError: If step_number is not between 1 and 5.
+        """
         if not (1 <= step_number <= 5):
             raise ValueError("Step must be between 1 and 5")
         field_name = self._STEP_FIELDS[SparkStep(step_number)]

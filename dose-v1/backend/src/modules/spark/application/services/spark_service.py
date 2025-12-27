@@ -9,6 +9,7 @@ from typing import List, Optional
 
 from src.modules.spark.domain.entities.spark_session import SparkSession
 from src.modules.spark.domain.repositories.spark_session_repository import ISparkSessionRepository
+from src.modules.spark.domain.value_objects.session_status import SessionStatus
 from src.modules.spark.application.dto.spark_dto import (
     CreateSparkSessionDTO,
     UpdateStepDTO,
@@ -23,12 +24,20 @@ class SparkService:
         self.session_repository = session_repository
 
     async def create_session(self, dto: CreateSparkSessionDTO) -> SparkSessionDTO:
-        """Create a new SPARK session."""
+        """
+        Create a new SPARK session.
+
+        Args:
+            dto: Data transfer object containing user_id.
+
+        Returns:
+            SparkSessionDTO with the created session data.
+        """
         # Create session entity
         session = SparkSession(
             id=uuid4(),
             user_id=dto.user_id,
-            status="in_progress",
+            status=SessionStatus.IN_PROGRESS,
             current_step=1,
             situation_response=None,
             perception_response=None,
@@ -47,48 +56,87 @@ class SparkService:
         return self._to_dto(created_session)
 
     async def update_step(self, dto: UpdateStepDTO) -> SparkSessionDTO:
-        """Update a step response."""
+        """
+        Update a step response in a session.
+
+        Args:
+            dto: Data transfer object with session_id, step_number, and response.
+
+        Returns:
+            SparkSessionDTO with the updated session data.
+
+        Raises:
+            ValueError: If session not found or step update is invalid.
+        """
         # Get session
         session = await self.session_repository.get_by_id(dto.session_id)
         if not session:
             raise ValueError(f"Session not found: {dto.session_id}")
-        
+
         # Check if can progress to this step
         if not session.can_progress_to_step(dto.step_number):
             raise ValueError(f"Cannot update step {dto.step_number}")
-        
+
         # Update step response (entity method handles logic)
         session.set_step_response(dto.step_number, dto.response)
         session.updated_at = datetime.utcnow()
-        
+
         # Save updated session
         updated_session = await self.session_repository.update(session)
-        
+
         return self._to_dto(updated_session)
     
     async def complete_session(self, session_id: UUID) -> SparkSessionDTO:
-        """Mark session as completed."""
+        """
+        Mark session as completed.
+
+        Args:
+            session_id: UUID of the session to complete.
+
+        Returns:
+            SparkSessionDTO with the completed session data.
+
+        Raises:
+            ValueError: If session not found or not all steps completed.
+        """
         # Get session
         session = await self.session_repository.get_by_id(session_id)
         if not session:
             raise ValueError(f"Session not found: {session_id}")
-        
+
         # Complete session (entity validates all steps done)
         session.complete_session()
         session.updated_at = datetime.utcnow()
-        
+
         # Save
         completed_session = await self.session_repository.update(session)
-        
+
         return self._to_dto(completed_session)
 
     async def get_session(self, session_id: UUID) -> Optional[SparkSessionDTO]:
-        """Get session by ID."""
+        """
+        Get session by ID.
+
+        Args:
+            session_id: UUID of the session to retrieve.
+
+        Returns:
+            SparkSessionDTO if found, None otherwise.
+        """
         session = await self.session_repository.get_by_id(session_id)
         return self._to_dto(session) if session else None
 
     async def get_user_sessions(self, user_id: UUID, limit: int = 50) -> List[SparkSessionSummaryDTO]:
-        """Get all sessions for a user."""
+        """
+        Get all sessions for a user.
+
+        Args:
+            user_id: UUID of the user.
+            limit: Maximum number of sessions to return (default: 50).
+
+        Returns:
+            List of SparkSessionSummaryDTO objects.
+        """
         sessions = await self.session_repository.get_by_user_id(user_id, limit)
         return [self._to_summary_dto(session) for session in sessions]
 
