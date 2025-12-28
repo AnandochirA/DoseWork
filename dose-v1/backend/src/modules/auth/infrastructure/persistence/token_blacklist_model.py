@@ -7,7 +7,7 @@ from sqlalchemy.dialects.postgresql import UUID
 from datetime import datetime
 import uuid
 
-from src.infrastructure.database.base import Base
+from src.infrastructure.database.session import Base
 
 
 class TokenBlacklist(Base):
