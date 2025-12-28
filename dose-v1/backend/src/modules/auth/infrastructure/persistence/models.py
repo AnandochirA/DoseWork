@@ -25,6 +25,7 @@ class User(Base):
 
     # Relationships
     spark_sessions = relationship("SparkSession", back_populates="user")
-
+    wave_sessions = relationship("WaveSession", back_populates="user") 
+    
     def __repr__(self) -> str:
         return f"<User(id={self.id}, email={self.email})>"
