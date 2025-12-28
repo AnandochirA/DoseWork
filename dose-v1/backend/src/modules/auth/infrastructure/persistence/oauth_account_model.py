@@ -8,7 +8,7 @@ from sqlalchemy.orm import relationship
 from datetime import datetime
 import uuid
 
-from src.infrastructure.database.base import Base
+from src.infrastructure.database.session import Base
 
 
 class OAuthAccount(Base):
