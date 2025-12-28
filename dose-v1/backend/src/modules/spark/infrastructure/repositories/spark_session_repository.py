@@ -9,6 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.modules.spark.domain.entities.spark_session import SparkSession as SparkSessionEntity
 from src.modules.spark.domain.repositories.spark_session_repository import ISparkSessionRepository
+from src.modules.spark.domain.value_objects.session_status import SessionStatus
 from src.modules.spark.infrastructure.persistence.models import SparkSession as SparkSessionModel
 
 class SparkSessionRepository(ISparkSessionRepository):
@@ -22,7 +23,7 @@ class SparkSessionRepository(ISparkSessionRepository):
         db_session = SparkSessionModel(
             id=session.id,
             user_id=session.user_id,
-            status=session.status,
+            status=session.status.value,  # Convert enum to string
             current_step=session.current_step,
             situation_response=session.situation_response,
             perception_response=session.perception_response,
@@ -92,7 +93,7 @@ class SparkSessionRepository(ISparkSessionRepository):
             raise ValueError(f"Session not found: {session.id}")
         
         # Update all fields
-        db_session.status = session.status
+        db_session.status = session.status.value  # Convert enum to string
         db_session.current_step = session.current_step
         db_session.situation_response = session.situation_response
         db_session.perception_response = session.perception_response
@@ -148,7 +149,7 @@ class SparkSessionRepository(ISparkSessionRepository):
         return SparkSessionEntity(
             id=model.id,
             user_id=model.user_id,
-            status=model.status,
+            status=SessionStatus.from_string(model.status),  # Convert string to enum
             current_step=model.current_step,
             situation_response=model.situation_response,
             perception_response=model.perception_response,
