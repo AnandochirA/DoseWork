@@ -5,6 +5,7 @@ Entry point for DOSE backend
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.sessions import SessionMiddleware
 
 from src.infrastructure.config.settings import settings
 from src.infrastructure.logging import setup_logging, get_logger
@@ -19,6 +20,16 @@ app = FastAPI(
     title=settings.APP_NAME,
     version=settings.APP_VERSION,
     debug=settings.DEBUG
+)
+
+# Add session middleware (required for OAuth)
+app.add_middleware(
+    SessionMiddleware,
+    secret_key=settings.SECRET_KEY,
+    session_cookie="dose_session",
+    max_age=1800,  # 30 minutes
+    same_site="lax",
+    https_only=settings.ENVIRONMENT == "production"
 )
 
 # Add logging middleware (first to capture all requests)
