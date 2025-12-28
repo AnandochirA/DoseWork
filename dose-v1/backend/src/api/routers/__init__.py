@@ -4,7 +4,8 @@ Registers all module routers with prefixes and tags
 """
 
 from fastapi import APIRouter
-from src.modules.auth.api.endpoints import router as auth_router
+# Use enhanced auth endpoints with OAuth, logout, password reset
+from src.modules.auth.api.endpoints.auth_endpoints_enhanced import router as auth_router
 from src.modules.spark.api.endpoints import router as spark_router
 from src.modules.wave.api.endpoints import router as wave_router
 

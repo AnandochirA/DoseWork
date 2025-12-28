@@ -49,6 +49,30 @@ class Settings(BaseSettings):
     # Logging level
     LOG_LEVEL: str = "INFO"
 
+    # OAuth - Google
+    GOOGLE_CLIENT_ID: str = ""
+    GOOGLE_CLIENT_SECRET: str = ""
+    GOOGLE_REDIRECT_URI: str = "http://localhost:8000/api/v1/auth/oauth/google/callback"
+
+    # OAuth - GitHub
+    GITHUB_CLIENT_ID: str = ""
+    GITHUB_CLIENT_SECRET: str = ""
+    GITHUB_REDIRECT_URI: str = "http://localhost:8000/api/v1/auth/oauth/github/callback"
+
+    # OAuth - LinkedIn
+    LINKEDIN_CLIENT_ID: str = ""
+    LINKEDIN_CLIENT_SECRET: str = ""
+    LINKEDIN_REDIRECT_URI: str = "http://localhost:8000/api/v1/auth/oauth/linkedin/callback"
+
+    # Frontend URLs
+    FRONTEND_URL: str = "http://localhost:3000"
+    OAUTH_SUCCESS_REDIRECT: str = "http://localhost:3000/auth/success"
+    OAUTH_ERROR_REDIRECT: str = "http://localhost:3000/auth/error"
+
+    # Password Reset
+    PASSWORD_RESET_TOKEN_EXPIRE_HOURS: int = 1
+    PASSWORD_RESET_URL: str = "http://localhost:3000/reset-password"
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",

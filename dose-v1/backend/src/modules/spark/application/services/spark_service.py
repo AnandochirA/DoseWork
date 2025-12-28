@@ -5,7 +5,7 @@ Business logic for SPARK cognitive restructuring sessions
 
 from datetime import datetime
 from uuid import uuid4, UUID
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 from src.modules.spark.domain.entities.spark_session import SparkSession
 from src.modules.spark.domain.repositories.spark_session_repository import ISparkSessionRepository
@@ -126,19 +126,25 @@ class SparkService:
         session = await self.session_repository.get_by_id(session_id)
         return self._to_dto(session) if session else None
 
-    async def get_user_sessions(self, user_id: UUID, limit: int = 50) -> List[SparkSessionSummaryDTO]:
+    async def get_user_sessions(
+        self,
+        user_id: UUID,
+        limit: int = 50,
+        offset: int = 0
+    ) -> Tuple[List[SparkSessionSummaryDTO], int]:
         """
-        Get all sessions for a user.
+        Get sessions for a user with pagination.
 
         Args:
             user_id: UUID of the user.
             limit: Maximum number of sessions to return (default: 50).
+            offset: Number of sessions to skip (default: 0).
 
         Returns:
-            List of SparkSessionSummaryDTO objects.
+            Tuple of (List of SparkSessionSummaryDTO objects, total count).
         """
-        sessions = await self.session_repository.get_by_user_id(user_id, limit)
-        return [self._to_summary_dto(session) for session in sessions]
+        sessions, total = await self.session_repository.get_by_user_id(user_id, limit, offset)
+        return [self._to_summary_dto(session) for session in sessions], total
 
     @staticmethod
     def _to_dto(session: SparkSession) -> SparkSessionDTO:

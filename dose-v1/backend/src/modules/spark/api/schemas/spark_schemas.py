@@ -14,7 +14,12 @@ class CreateSessionRequest(BaseModel):
 class UpdateStepRequest(BaseModel):
     """Request schema for updating step response."""
     step_number: int = Field(..., ge=1, le=5, description="Step number (1-5)")
-    response: str = Field(..., min_length=1, description="User's response to the step")
+    response: str = Field(
+        ...,
+        min_length=1,
+        max_length=5000,
+        description="User's response to the step (max 5000 characters)"
+    )
 
 class SessionResponse(BaseModel):
     """Response schema for complete session data."""
@@ -49,3 +54,5 @@ class SessionListResponse(BaseModel):
     """Response schema for list of sessions."""
     sessions: List[SessionSummaryResponse]
     total: int
+    offset: int = Field(default=0, description="Number of items skipped")
+    limit: int = Field(default=50, description="Number of items returned")

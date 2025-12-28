@@ -30,7 +30,36 @@ class UserResponse(BaseModel):
     full_name: Optional[str]
     is_active: bool
     is_verified: bool
-    
+
     class Config:
         from_attributes = True
+
+
+# ========== New Schemas for Enhanced Auth ==========
+
+class DeleteAccountRequest(BaseModel):
+    """Request schema for account deletion (requires password confirmation)."""
+    password: str = Field(..., min_length=1, description="Current password for confirmation")
+
+
+class ForgotPasswordRequest(BaseModel):
+    """Request schema for password reset request."""
+    email: EmailStr
+
+
+class ResetPasswordRequest(BaseModel):
+    """Request schema for password reset."""
+    token: str = Field(..., min_length=1, description="Password reset token from email")
+    new_password: str = Field(..., min_length=8, description="New password (min 8 characters)")
+
+
+class MessageResponse(BaseModel):
+    """Generic message response."""
+    message: str
+
+
+class PasswordResetResponse(BaseModel):
+    """Response for password reset request (for testing only)."""
+    message: str
+    reset_token: Optional[str] = None  # Only in development
 

@@ -139,14 +139,31 @@ async def complete_session(session_id: UUID, user_id: UUID = Depends(get_current
 @router.get("/sessions", response_model=SessionListResponse)
 async def list_sessions(
     limit: int = 50,
+    offset: int = 0,
     user_id: UUID = Depends(get_current_user_id),
     spark_service: SparkService = Depends(get_spark_service)
 ):
-    """Get all SPARK sessions for the current user."""
-    # Get user's sessions
-    sessions = await spark_service.get_user_sessions(user_id, limit)
-    
+    """
+    Get all SPARK sessions for the current user with pagination.
+
+    Args:
+        limit: Maximum number of sessions to return (default: 50, max: 100)
+        offset: Number of sessions to skip (default: 0)
+    """
+    # Validate pagination parameters
+    if limit > 100:
+        limit = 100
+    if limit < 1:
+        limit = 1
+    if offset < 0:
+        offset = 0
+
+    # Get user's sessions with pagination
+    sessions, total = await spark_service.get_user_sessions(user_id, limit, offset)
+
     return SessionListResponse(
         sessions=sessions,
-        total=len(sessions)
+        total=total,
+        offset=offset,
+        limit=limit
     )

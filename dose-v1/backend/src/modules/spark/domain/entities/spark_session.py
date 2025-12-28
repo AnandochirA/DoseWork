@@ -73,7 +73,7 @@ class SparkSession:
             response: The user's response text.
 
         Raises:
-            ValueError: If step progression is invalid or response is empty.
+            ValueError: If step progression is invalid, response is empty, or too long.
         """
         if not self.can_progress_to_step(step_number):
             raise ValueError(f"Cannot set response for step {step_number} at this time")
@@ -81,6 +81,9 @@ class SparkSession:
         response = response.strip()
         if not response:
             raise ValueError("Response cannot be empty")
+
+        if len(response) > 5000:
+            raise ValueError("Response cannot exceed 5000 characters")
 
         step = SparkStep(step_number)
         field_name = self._STEP_FIELDS[step]
