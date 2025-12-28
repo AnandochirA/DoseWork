@@ -4,7 +4,7 @@ Defines contract for SPARK session data access
 """
 
 from abc import ABC, abstractmethod
-from typing import Optional, List
+from typing import Optional, List, Tuple
 from uuid import UUID
 
 from src.modules.spark.domain.entities.spark_session import SparkSession
@@ -28,13 +28,12 @@ class ISparkSessionRepository(ABC):
     async def get_by_user_id(
         self,
         user_id: UUID,
-        status: Optional[SessionStatus] = None,
         limit: int = 50,
         offset: int = 0
-    ) -> List[SparkSession]:
+    ) -> Tuple[List[SparkSession], int]:
         """
-        Get sessions for a user.
-        Optional filtering by status and pagination support.
+        Get sessions for a user with pagination.
+        Returns tuple of (sessions list, total count).
         """
         pass
 
@@ -44,8 +43,8 @@ class ISparkSessionRepository(ABC):
         pass
 
     @abstractmethod
-    async def delete(self, session_id: UUID) -> None:
-        """Delete session by ID. Raises exception if not found."""
+    async def delete(self, session_id: UUID) -> bool:
+        """Delete session by ID. Returns True if deleted, False if not found."""
         pass
 
     @abstractmethod

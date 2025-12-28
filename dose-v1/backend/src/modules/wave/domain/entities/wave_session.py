@@ -8,6 +8,8 @@ from datetime import datetime
 from typing import Optional
 from uuid import UUID
 
+from src.modules.wave.domain.value_objects.session_status import SessionStatus
+
 @dataclass
 class WaveSession:
     """
@@ -16,7 +18,7 @@ class WaveSession:
     """
     id: UUID
     user_id: UUID
-    status: str
+    status: SessionStatus
     current_step: int
 
     situation: Optional[str]
@@ -32,7 +34,7 @@ class WaveSession:
 
     created_at: datetime
     updated_at: datetime
-    completed_at: datetime
+    completed_at: Optional[datetime]
 
     def can_progress_to_step(self, step_number: int) -> bool:
         """Check if session can progress to given step."""
@@ -45,7 +47,7 @@ class WaveSession:
             return False
         
         # Can't progress if completed
-        if self.status == "completed":
+        if self.status == SessionStatus.COMPLETED:
             return False
         
         return True
@@ -100,13 +102,13 @@ class WaveSession:
         ]):
             raise ValueError("All steps must be completed before finishing the session")
         
-        self.status = "completed"
+        self.status = SessionStatus.COMPLETED
         self.completed_at = datetime.utcnow()
         self.updated_at = datetime.utcnow()
 
     def is_completed(self) -> bool:
         """Check if session is completed."""
-        return self.status == "completed"
+        return self.status == SessionStatus.COMPLETED
 
     def get_progress_percentage(self) -> float:
         """Get session completion progress as percentage."""

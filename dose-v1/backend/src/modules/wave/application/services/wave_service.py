@@ -4,11 +4,12 @@ Orchestrates WAVE session business logic
 """
 
 from datetime import datetime
-from typing import List
+from typing import List, Tuple
 from uuid import UUID, uuid4
 
 from src.modules.wave.domain.entities.wave_session import WaveSession
 from src.modules.wave.domain.repositories.wave_session_repository import IWaveSessionRepository
+from src.modules.wave.domain.value_objects.session_status import SessionStatus
 from src.modules.wave.application.dto.wave_dto import (
     CreateWaveSessionDTO,
     UpdateCheckinDTO,
@@ -31,7 +32,7 @@ class WaveService:
         session = WaveSession(
             id=uuid4(),
             user_id=dto.user_id,
-            status="in_progress",
+            status=SessionStatus.IN_PROGRESS,
             current_step=1,
             situation=None,
             emotion=None,
@@ -163,10 +164,18 @@ class WaveService:
         
         return self._to_dto(session)
 
-    async def get_user_sessions(self, user_id: UUID, limit: int = 50) -> List[WaveSessionSummaryDTO]:
-        """Get all sessions for a user."""
-        sessions = await self.repository.get_by_user_id(user_id, limit)
-        return [self._to_summary_dto(session) for session in sessions]
+    async def get_user_sessions(
+        self,
+        user_id: UUID,
+        limit: int = 50,
+        offset: int = 0
+    ) -> Tuple[List[WaveSessionSummaryDTO], int]:
+        """
+        Get sessions for a user with pagination.
+        Returns tuple of (sessions list, total count).
+        """
+        sessions, total = await self.repository.get_by_user_id(user_id, limit, offset)
+        return [self._to_summary_dto(session) for session in sessions], total
 
     @staticmethod
     def _to_dto(session: WaveSession) -> WaveSessionDTO:

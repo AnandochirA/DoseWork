@@ -2,13 +2,14 @@
 WaveSession Repository Implementation - Infrastructure Layer
 """
 
-from typing import List, Optional
+from typing import List, Optional, Tuple
 from uuid import UUID
-from sqlalchemy import select
+from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.modules.wave.domain.entities.wave_session import WaveSession as WaveSessionEntity
 from src.modules.wave.domain.repositories.wave_session_repository import IWaveSessionRepository
+from src.modules.wave.domain.value_objects.session_status import SessionStatus
 from src.modules.wave.infrastructure.persistence.models import WaveSession as WaveSessionModel
 
 class WaveSessionRepository(IWaveSessionRepository):
@@ -22,7 +23,7 @@ class WaveSessionRepository(IWaveSessionRepository):
         db_session = WaveSessionModel(
             id=session.id,
             user_id=session.user_id,
-            status=session.status,
+            status=session.status.value,  # Convert enum to string
             current_step=session.current_step,
             situation=session.situation,
             emotion=session.emotion,
@@ -49,16 +50,34 @@ class WaveSessionRepository(IWaveSessionRepository):
         db_session = result.scalar_one_or_none()
         return self._to_entity(db_session) if db_session else None
 
-    async def get_by_user_id(self, user_id: UUID, limit: int = 50) -> List[WaveSessionEntity]:
-        """Get all sessions for a user."""
+    async def get_by_user_id(
+        self,
+        user_id: UUID,
+        limit: int = 50,
+        offset: int = 0
+    ) -> Tuple[List[WaveSessionEntity], int]:
+        """
+        Get sessions for a user with pagination.
+        Returns tuple of (sessions list, total count).
+        """
+        # Get paginated results
         result = await self.session.execute(
             select(WaveSessionModel)
             .where(WaveSessionModel.user_id == user_id)
             .order_by(WaveSessionModel.created_at.desc())
             .limit(limit)
+            .offset(offset)
         )
         db_sessions = result.scalars().all()
-        return [self._to_entity(db_session) for db_session in db_sessions]
+
+        # Get total count
+        count_result = await self.session.execute(
+            select(func.count(WaveSessionModel.id))
+            .where(WaveSessionModel.user_id == user_id)
+        )
+        total_count = count_result.scalar()
+
+        return [self._to_entity(db_session) for db_session in db_sessions], total_count
 
     async def update(self, session: WaveSessionEntity) -> WaveSessionEntity:
         """Update existing session."""
@@ -70,7 +89,7 @@ class WaveSessionRepository(IWaveSessionRepository):
             raise ValueError(f"Session not found: {session.id}")
         
         # Update all fields
-        db_session.status = session.status
+        db_session.status = session.status.value  # Convert enum to string
         db_session.current_step = session.current_step
         db_session.situation = session.situation
         db_session.emotion = session.emotion
@@ -129,7 +148,7 @@ class WaveSessionRepository(IWaveSessionRepository):
         return WaveSessionEntity(
             id=model.id,
             user_id=model.user_id,
-            status=model.status,
+            status=SessionStatus.from_string(model.status),  # Convert string to enum
             current_step=model.current_step,
             situation=model.situation,
             emotion=model.emotion,

@@ -279,15 +279,18 @@ async def complete_session(
 @router.get("/sessions", response_model=SessionListResponse)
 async def list_sessions(
     limit: int = Query(default=50, ge=1, le=100),
+    offset: int = Query(default=0, ge=0),
     user_id: UUID = Depends(get_current_user_id),
     wave_service: WaveService = Depends(get_wave_service)
 ):
-    """Get all sessions for the current user."""
+    """Get all sessions for the current user with pagination."""
     try:
-        sessions = await wave_service.get_user_sessions(user_id, limit)
+        sessions, total = await wave_service.get_user_sessions(user_id, limit, offset)
         return SessionListResponse(
             sessions=sessions,
-            total=len(sessions)
+            total=total,
+            offset=offset,
+            limit=limit
         )
     except Exception as e:
         raise HTTPException(
