@@ -66,13 +66,6 @@ class AuthServiceEnhanced:
         if not user:
             raise ValueError("Invalid email or password")
 
-        # DEBUG: Log password details
-        print(f"DEBUG - Password length: {len(dto.password)}")
-        print(f"DEBUG - Password bytes: {len(dto.password.encode('utf-8'))}")
-        print(f"DEBUG - Password preview: {dto.password[:20]}...")
-        print(f"DEBUG - Hash length: {len(user.hashed_password)}")
-        print(f"DEBUG - Hash preview: {user.hashed_password[:20]}...")
-
         if not verify_password(dto.password, user.hashed_password):
             raise ValueError("Invalid email or password")
 
