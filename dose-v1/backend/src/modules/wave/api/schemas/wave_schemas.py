@@ -7,6 +7,8 @@ from typing import List, Optional
 from uuid import UUID
 from pydantic import BaseModel, Field, field_validator
 
+from src.modules.wave.domain.value_objects.action_type import ActionType
+
 class CreateSessionRequest(BaseModel):
     """Request to create a new WAVE session."""
     # Empty - user_id comes from JWT token
@@ -45,6 +47,15 @@ class UpdateActionRequest(BaseModel):
     """Request to update action choice (step 3)."""
     action_type: str = Field(..., min_length=1, description="Action type identifier")
     action_notes: Optional[str] = Field(None, max_length=2000, description="Optional notes (JSON string)")
+
+    @field_validator('action_type')
+    @classmethod
+    def validate_action_type(cls, v: str) -> str:
+        """Validate that action_type is a valid ActionType enum value."""
+        valid_actions = [action.value for action in ActionType]
+        if v not in valid_actions:
+            raise ValueError(f"Invalid action_type. Must be one of: {', '.join(valid_actions)}")
+        return v
 
 class CompleteActionRequest(BaseModel):
     """Request to mark action as completed."""
@@ -95,7 +106,9 @@ class SessionSummaryResponse(BaseModel):
     model_config = {"from_attributes": True}
 
 class SessionListResponse(BaseModel):
-    """List of WAVE sessions."""
+    """List of WAVE sessions with pagination."""
     sessions: List[SessionSummaryResponse]
     total: int
+    offset: int = Field(default=0)
+    limit: int = Field(default=50)
 
